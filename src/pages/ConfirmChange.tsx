@@ -39,9 +39,13 @@ export default function ConfirmChange() {
 
       <div className="w-full max-w-sm rounded-md border border-charcoal-700 bg-charcoal-800 p-8 text-center">
         <div className="mb-8 flex flex-col items-center gap-3">
-          <span className="flex h-12 w-12 items-center justify-center rounded-md bg-safety-500 text-white">
-            <HardHat className="h-6 w-6" />
-          </span>
+          {settings.logo_url ? (
+            <img src={settings.logo_url} alt={settings.brand_name} className="h-12 w-12 rounded-md object-contain" />
+          ) : (
+            <span className="flex h-12 w-12 items-center justify-center rounded-md bg-safety-500 text-white">
+              <HardHat className="h-6 w-6" />
+            </span>
+          )}
           <h1 className="font-heading text-xl font-semibold text-white">{settings.brand_name}</h1>
         </div>
 

@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { HardHat, Lock, Mail } from "lucide-react";
@@ -27,9 +27,24 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [checkingSession, setCheckingSession] = useState(true);
+  const [hasSession, setHasSession] = useState(false);
 
   const reason = new URLSearchParams(location.search).get("reason");
   const reasonMessage = reason ? REASON_MESSAGES[reason] : null;
+
+  // An already-authenticated visitor shouldn't see the login form again --
+  // send them straight to the dashboard instead.
+  useEffect(() => {
+    if (sessionStorage.getItem("logging_out")) {
+      setCheckingSession(false);
+      return;
+    }
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setHasSession(!!session);
+      setCheckingSession(false);
+    });
+  }, []);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -60,6 +75,8 @@ export default function Login() {
   }
 
   if (sessionStorage.getItem("logging_out")) return <Navigate to="/login" replace />;
+  if (checkingSession) return null;
+  if (hasSession) return <Navigate to="/dashboard" replace />;
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-charcoal-900 px-4 py-16">
@@ -70,9 +87,13 @@ export default function Login() {
 
       <div className="w-full max-w-sm rounded-md border border-charcoal-700 bg-charcoal-800 p-8">
         <div className="mb-8 flex flex-col items-center gap-3 text-center">
-          <span className="flex h-12 w-12 items-center justify-center rounded-md bg-safety-500 text-white">
-            <HardHat className="h-6 w-6" />
-          </span>
+          {settings.logo_url ? (
+            <img src={settings.logo_url} alt={settings.brand_name} className="h-12 w-12 rounded-md object-contain" />
+          ) : (
+            <span className="flex h-12 w-12 items-center justify-center rounded-md bg-safety-500 text-white">
+              <HardHat className="h-6 w-6" />
+            </span>
+          )}
           <div>
             <h1 className="font-heading text-xl font-semibold text-white">{settings.brand_name}</h1>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-steel-400">Admin Login</p>

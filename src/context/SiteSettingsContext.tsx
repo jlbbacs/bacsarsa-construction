@@ -33,6 +33,22 @@ export function SiteSettingsProvider({ children }: { children: ReactNode }) {
     };
   }, [refreshKey]);
 
+  // Keeps the browser-tab favicon in sync with the uploaded logo, same as
+  // the nav/login/admin-header branding -- falls back to the static
+  // /favicon.svg when no logo has been uploaded.
+  useEffect(() => {
+    const link = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
+    if (!link) return;
+
+    if (settings.logo_url) {
+      link.href = settings.logo_url;
+      link.removeAttribute("type");
+    } else {
+      link.href = "/favicon.svg";
+      link.type = "image/svg+xml";
+    }
+  }, [settings.logo_url]);
+
   return (
     <SiteSettingsContext.Provider value={{ settings, loading, refresh: () => setRefreshKey((k) => k + 1) }}>
       {children}

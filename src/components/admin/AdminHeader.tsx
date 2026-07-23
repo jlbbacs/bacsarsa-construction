@@ -62,9 +62,13 @@ export function AdminHeader({
     <header className="bg-charcoal-900">
       <Container className="flex h-16 items-center justify-between">
         <div className="flex items-center gap-2.5 font-heading text-lg font-semibold text-white">
-          <span className="flex h-9 w-9 items-center justify-center rounded-md bg-safety-500 text-white">
-            <HardHat className="h-5 w-5" />
-          </span>
+          {settings.logo_url ? (
+            <img src={settings.logo_url} alt={settings.brand_name} className="h-9 w-9 rounded-md object-contain" />
+          ) : (
+            <span className="flex h-9 w-9 items-center justify-center rounded-md bg-safety-500 text-white">
+              <HardHat className="h-5 w-5" />
+            </span>
+          )}
           {settings.brand_name}
           <span className="ml-1 text-xs font-semibold uppercase tracking-wide text-steel-400">Admin</span>
         </div>
