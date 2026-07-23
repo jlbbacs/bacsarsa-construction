@@ -11,8 +11,24 @@ interface SiteSettingsContextValue {
 
 const SiteSettingsContext = createContext<SiteSettingsContextValue | null>(null);
 
+const CACHE_KEY = "site_settings_cache";
+
+// Reads the last successfully-fetched settings from localStorage so a page
+// refresh starts from the real brand name/logo instead of flashing the
+// generic FALLBACK_SITE_SETTINGS ("Meridian Construction Group", no logo)
+// while the async Supabase fetch is in flight.
+function getCachedSettings(): SiteSettings {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return FALLBACK_SITE_SETTINGS;
+    return { ...FALLBACK_SITE_SETTINGS, ...(JSON.parse(raw) as SiteSettings) };
+  } catch {
+    return FALLBACK_SITE_SETTINGS;
+  }
+}
+
 export function SiteSettingsProvider({ children }: { children: ReactNode }) {
-  const [settings, setSettings] = useState<SiteSettings>(FALLBACK_SITE_SETTINGS);
+  const [settings, setSettings] = useState<SiteSettings>(getCachedSettings);
   const [loading, setLoading] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -23,8 +39,17 @@ export function SiteSettingsProvider({ children }: { children: ReactNode }) {
       setLoading(true);
       const { data } = await supabase.from("site_settings").select("*").eq("id", 1).single();
       if (!cancelled) {
-        setSettings(data ? { ...FALLBACK_SITE_SETTINGS, ...(data as SiteSettings) } : FALLBACK_SITE_SETTINGS);
+        const resolved = data ? { ...FALLBACK_SITE_SETTINGS, ...(data as SiteSettings) } : FALLBACK_SITE_SETTINGS;
+        setSettings(resolved);
         setLoading(false);
+        if (data) {
+          try {
+            localStorage.setItem(CACHE_KEY, JSON.stringify(resolved));
+          } catch {
+            // Ignore storage failures (private browsing, quota, etc.) --
+            // caching is a nice-to-have, not required for correctness.
+          }
+        }
       }
     })();
 
