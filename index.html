@@ -4,24 +4,26 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Meridian Construction Group | Commercial & Residential Builders</title>
-    <meta
-      name="description"
-      content="Meridian Construction Group delivers commercial, residential, and industrial construction projects on time and on budget. Licensed, insured, and built on trust."
-    />
+    <!-- Title, description, og:type/title/description, and twitter:card are
+         deliberately NOT set statically here -- react-helmet-async (via
+         SEO.tsx) sets a real per-page value for each of these, and this app
+         has no server-side rendering, so a static duplicate here would just
+         sit alongside Helmet's tag rather than being replaced by it (Helmet
+         only manages tags it renders itself, not pre-existing static ones),
+         permanently shadowing every page's real description/title behind
+         this generic one. Non-JS crawlers (social link unfurlers) will see
+         no description until that's solved with real SSR; that's an
+         accepted trade-off over showing a wrong one on every single page. -->
+    <title>Bacsarsa Construction Group</title>
     <meta name="keywords" content="construction company, general contractor, commercial construction, residential builder, remodeling, construction services" />
-    <meta name="author" content="Meridian Construction Group" />
+    <meta name="author" content="Bacsarsa Construction Group" />
     <!-- No static canonical link here: SEO.tsx sets a real per-page canonical via
          react-helmet-async, and a root href="/" here crashes `vite build` on this
          Vite/rolldown version (EISDIR: it reads the href as an asset path and tries
          to open the project root as a file). -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Meridian Construction Group" />
-    <meta property="og:title" content="Meridian Construction Group | Commercial & Residential Builders" />
-    <meta property="og:description" content="Licensed, insured construction company delivering commercial, residential, and industrial projects on time and on budget." />
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:site_name" content="Bacsarsa Construction Group" />
 
     <meta name="theme-color" content="#1a1d21" />
 

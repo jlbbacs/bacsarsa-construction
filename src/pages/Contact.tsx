@@ -12,7 +12,7 @@ export default function Contact() {
     <>
       <SEO
         title="Contact"
-        description="Get a free quote from Meridian Construction Group. Tell us about your commercial, residential, or industrial project."
+        description={`Get a free quote from ${settings.brand_name}. Tell us about your commercial, residential, or industrial project.`}
         path="/contact"
       />
 

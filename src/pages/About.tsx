@@ -7,9 +7,11 @@ import { StatsStrip } from "../components/StatsStrip";
 import { PageLoader } from "../components/PageLoader";
 import { ButtonLink } from "../components/Button";
 import { useAboutConfig } from "../hooks/useAboutConfig";
+import { useSiteSettingsContext } from "../context/SiteSettingsContext";
 
 export default function About() {
   const { config, loading } = useAboutConfig();
+  const { settings } = useSiteSettingsContext();
 
   if (loading) return <PageLoader />;
 
@@ -17,7 +19,7 @@ export default function About() {
     <>
       <SEO
         title="About Us"
-        description="Learn about Meridian Construction Group's history, mission, and the crews behind every build."
+        description={`Learn about ${settings.brand_name}'s history, mission, and the crews behind every build.`}
         path="/about"
       />
 

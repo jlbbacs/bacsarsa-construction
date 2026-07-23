@@ -82,7 +82,7 @@ export default function Projects() {
     <>
       <SEO
         title="Projects"
-        description="Browse Meridian Construction Group's portfolio of commercial, residential, and industrial construction projects."
+        description={`Browse ${settings.brand_name}'s portfolio of commercial, residential, and industrial construction projects.`}
         path="/projects"
       />
 

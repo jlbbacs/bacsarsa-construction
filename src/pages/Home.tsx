@@ -23,7 +23,7 @@ export default function Home() {
     <>
       <SEO
         title="Home"
-        description="Meridian Construction Group delivers commercial, residential, and industrial construction projects on time and on budget."
+        description={`${settings.brand_name} delivers commercial, residential, and industrial construction projects on time and on budget.`}
         path="/"
       />
 
