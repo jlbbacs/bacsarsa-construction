@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { MapPin } from "lucide-react";
 import type { Project } from "../types";
@@ -12,22 +13,18 @@ export function ProjectCard({
   project,
   index = 0,
   onClick,
+  to,
 }: {
   project: Project;
   index?: number;
   onClick?: () => void;
+  to?: string;
 }) {
-  return (
-    <motion.button
-      type="button"
-      onClick={onClick}
-      initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.4, delay: index * 0.06 }}
-      whileHover={{ y: -4 }}
-      className="group flex flex-col overflow-hidden rounded-md border border-concrete-200 bg-white text-left shadow-sm transition-shadow hover:shadow-md"
-    >
+  const cardClassName =
+    "group flex w-full flex-col overflow-hidden rounded-md border border-concrete-200 bg-white text-left shadow-sm transition-shadow hover:shadow-md";
+
+  const content = (
+    <>
       <div className="relative flex h-48 items-center justify-center overflow-hidden bg-gradient-to-br from-charcoal-800 to-charcoal-900">
         {project.image_url ? (
           <img src={project.image_url} alt={project.title} className="h-full w-full object-cover" />
@@ -54,6 +51,26 @@ export function ProjectCard({
           </span>
         )}
       </div>
-    </motion.button>
+    </>
+  );
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.4, delay: index * 0.06 }}
+      whileHover={{ y: -4 }}
+    >
+      {to ? (
+        <Link to={to} className={cardClassName}>
+          {content}
+        </Link>
+      ) : (
+        <button type="button" onClick={onClick} className={cardClassName}>
+          {content}
+        </button>
+      )}
+    </motion.div>
   );
 }

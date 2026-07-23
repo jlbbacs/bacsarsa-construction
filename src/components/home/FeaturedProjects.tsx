@@ -22,7 +22,7 @@ export function FeaturedProjects({ projects, loading }: { projects: Project[]; l
         {!loading && (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {featured.slice(0, 3).map((project, i) => (
-              <ProjectCard key={project.id} project={project} index={i} />
+              <ProjectCard key={project.id} project={project} index={i} to={`/projects?project=${project.id}`} />
             ))}
           </div>
         )}

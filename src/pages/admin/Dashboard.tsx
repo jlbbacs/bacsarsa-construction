@@ -11,6 +11,8 @@ import { HomeSettingsPanel } from "../../components/admin/HomeSettingsPanel";
 import { AboutSettingsPanel } from "../../components/admin/AboutSettingsPanel";
 import { SiteSettingsPanel } from "../../components/admin/SiteSettingsPanel";
 import { AccountSettingsPanel } from "../../components/admin/AccountSettingsPanel";
+import { UsersPanel } from "../../components/admin/UsersPanel";
+import { ActivityLogsPanel } from "../../components/admin/ActivityLogsPanel";
 import { useAdminBlogPosts } from "../../hooks/useAdminBlogPosts";
 import { useBlogCategories } from "../../hooks/useBlogCategories";
 import { useIdleTimeout } from "../../lib/useIdleTimeout";
@@ -73,6 +75,10 @@ export default function Dashboard() {
           <AboutSettingsPanel />
         ) : tab === "settings" ? (
           <SiteSettingsPanel />
+        ) : tab === "users" ? (
+          <UsersPanel />
+        ) : tab === "security" ? (
+          <ActivityLogsPanel />
         ) : (
           <AccountSettingsPanel />
         )}

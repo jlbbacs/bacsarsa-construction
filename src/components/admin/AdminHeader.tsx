@@ -3,8 +3,19 @@ import { HardHat, LogOut } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { Container } from "../Container";
 import { useSiteSettingsContext } from "../../context/SiteSettingsContext";
+import { useCurrentProfile } from "../../context/ProfileContext";
 
-export type AdminTab = "posts" | "categories" | "services" | "projects" | "home" | "about" | "settings" | "account";
+export type AdminTab =
+  | "posts"
+  | "categories"
+  | "services"
+  | "projects"
+  | "home"
+  | "about"
+  | "settings"
+  | "users"
+  | "security"
+  | "account";
 
 const TAB_LABELS: Record<AdminTab, string> = {
   posts: "Posts",
@@ -14,8 +25,18 @@ const TAB_LABELS: Record<AdminTab, string> = {
   home: "Home",
   about: "About",
   settings: "Settings",
+  users: "Users",
+  security: "Security",
   account: "Account",
 };
+
+// Tabs every role can see, in display order. Super-Admin-only tabs
+// (settings, users, security) are appended separately below -- per spec,
+// Administrators can manage content (posts/categories/services/projects/
+// home/about) and their own account, but cannot touch system settings,
+// user management, or security/activity logs.
+const SHARED_TABS: AdminTab[] = ["posts", "categories", "services", "projects", "home", "about", "account"];
+const SUPER_ADMIN_ONLY_TABS: AdminTab[] = ["users", "security", "settings"];
 
 export function AdminHeader({
   tab,
@@ -25,7 +46,10 @@ export function AdminHeader({
   onTabChange: (tab: AdminTab) => void;
 }) {
   const { settings } = useSiteSettingsContext();
+  const { profile } = useCurrentProfile();
   const navigate = useNavigate();
+
+  const visibleTabs = profile?.role === "super_admin" ? [...SHARED_TABS, ...SUPER_ADMIN_ONLY_TABS] : SHARED_TABS;
 
   async function handleLogout() {
     sessionStorage.setItem("logging_out", "true");
@@ -61,7 +85,7 @@ export function AdminHeader({
       </Container>
 
       <Container className="flex flex-wrap gap-1 pb-0">
-        {(["posts", "categories", "services", "projects", "home", "about", "settings", "account"] as const).map((t) => (
+        {visibleTabs.map((t) => (
           <button
             key={t}
             type="button"

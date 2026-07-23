@@ -123,3 +123,38 @@ export interface BlogPost {
   blog_categories?: { name: string; slug: string } | null;
   blog_post_tags?: { blog_tags: BlogTag }[];
 }
+
+export type UserRole = "super_admin" | "admin";
+
+export type UserStatus = "active" | "pending_verification" | "disabled" | "suspended" | "locked";
+
+export interface Profile {
+  id: string;
+  first_name: string;
+  last_name: string;
+  username: string;
+  phone: string | null;
+  role: UserRole;
+  status: UserStatus;
+  avatar_url: string | null;
+  failed_attempts: number;
+  locked_until: string | null;
+  force_password_change: boolean;
+  last_login_at: string | null;
+  created_at: string;
+  updated_at: string;
+  email: string | null;
+}
+
+export interface ActivityLog {
+  id: string;
+  actor_user_id: string | null;
+  action: string;
+  target_user_id: string | null;
+  ip_address: string | null;
+  user_agent: string | null;
+  metadata: Record<string, unknown>;
+  created_at: string;
+  actor?: { username: string; first_name: string; last_name: string } | null;
+  target?: { username: string; first_name: string; last_name: string } | null;
+}

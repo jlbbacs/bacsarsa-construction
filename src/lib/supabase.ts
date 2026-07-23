@@ -56,24 +56,42 @@ function createStubStorageBucket() {
   };
 }
 
+const NOT_CONFIGURED_ERROR = {
+  message: "Supabase is not configured. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to your .env file.",
+};
+
 function createStubClient(): SupabaseClient {
   return {
     from: () => createStubQueryBuilder(),
     storage: { from: () => createStubStorageBucket() },
+    rpc: async () => {
+      warnOnce();
+      return { data: null, error: NOT_CONFIGURED_ERROR };
+    },
+    functions: {
+      invoke: async () => {
+        warnOnce();
+        return { data: null, error: NOT_CONFIGURED_ERROR };
+      },
+    },
     auth: {
       getSession: async () => {
         warnOnce();
         return { data: { session: null }, error: null };
       },
+      getUser: async () => {
+        warnOnce();
+        return { data: { user: null }, error: null };
+      },
       onAuthStateChange: () => ({ data: { subscription: { unsubscribe() {} } } }),
       signInWithPassword: async () => ({
         data: { session: null, user: null },
-        error: {
-          message:
-            "Supabase is not configured. Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to your .env file.",
-        },
+        error: NOT_CONFIGURED_ERROR,
       }),
       signOut: async () => ({ error: null }),
+      updateUser: async () => ({ data: { user: null }, error: NOT_CONFIGURED_ERROR }),
+      resetPasswordForEmail: async () => ({ data: {}, error: NOT_CONFIGURED_ERROR }),
+      resend: async () => ({ data: {}, error: NOT_CONFIGURED_ERROR }),
     },
   } as unknown as SupabaseClient;
 }

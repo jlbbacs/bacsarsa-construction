@@ -2,6 +2,8 @@ import { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { SiteSettingsProvider } from "./context/SiteSettingsContext";
+import { ToastProvider } from "./context/ToastContext";
+import { ProfileProvider } from "./context/ProfileContext";
 import { NavBar } from "./components/NavBar";
 import { Footer } from "./components/Footer";
 import { PageLoader } from "./components/PageLoader";
@@ -15,12 +17,18 @@ const BlogList = lazy(() => import("./pages/BlogList"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Login = lazy(() => import("./pages/Login"));
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const Dashboard = lazy(() => import("./pages/admin/Dashboard"));
+const SetPassword = lazy(() => import("./pages/admin/SetPassword"));
+const ConfirmChange = lazy(() => import("./pages/ConfirmChange"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+
+const SYSTEM_PATHS = ["/login", "/forgot-password", "/reset-password", "/set-password", "/confirm-change", "/dashboard"];
 
 function AppShell() {
   const location = useLocation();
-  const isSystemPage = location.pathname === "/login" || location.pathname === "/dashboard";
+  const isSystemPage = SYSTEM_PATHS.includes(location.pathname);
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -42,6 +50,10 @@ function AppShell() {
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/set-password" element={<SetPassword />} />
+            <Route path="/confirm-change" element={<ConfirmChange />} />
             <Route
               path="/dashboard"
               element={
@@ -64,7 +76,11 @@ export default function App() {
     <BrowserRouter>
       <HelmetProvider>
         <SiteSettingsProvider>
-          <AppShell />
+          <ToastProvider>
+            <ProfileProvider>
+              <AppShell />
+            </ProfileProvider>
+          </ToastProvider>
         </SiteSettingsProvider>
       </HelmetProvider>
     </BrowserRouter>

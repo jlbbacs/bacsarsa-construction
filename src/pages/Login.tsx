@@ -7,6 +7,18 @@ import { ErrorNotice } from "../components/ErrorNotice";
 import { Button } from "../components/Button";
 import { useSiteSettingsContext } from "../context/SiteSettingsContext";
 
+const REASON_MESSAGES: Record<string, string> = {
+  expired: "Your session expired. Please sign in again.",
+  disabled: "Your account has been disabled. Contact your Super Admin.",
+  suspended: "Your account is suspended pending Super Admin approval.",
+  locked: "Your account was locked due to too many failed login attempts.",
+};
+
+interface LockCheckRow {
+  locked: boolean;
+  locked_until: string | null;
+}
+
 export default function Login() {
   const { settings } = useSiteSettingsContext();
   const navigate = useNavigate();
@@ -16,14 +28,27 @@ export default function Login() {
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  const expired = new URLSearchParams(location.search).get("reason") === "expired";
+  const reason = new URLSearchParams(location.search).get("reason");
+  const reasonMessage = reason ? REASON_MESSAGES[reason] : null;
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setSubmitting(true);
     setError(null);
 
+    const { data: lockData } = await supabase.rpc("check_account_lock", { p_email: email });
+    const lockRow = (Array.isArray(lockData) ? lockData[0] : lockData) as LockCheckRow | undefined;
+
+    if (lockRow?.locked) {
+      const until = lockRow.locked_until ? new Date(lockRow.locked_until).toLocaleTimeString() : "shortly";
+      setError(`This account is locked due to too many failed attempts. Try again after ${until}.`);
+      setSubmitting(false);
+      return;
+    }
+
     const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+
+    await supabase.rpc("record_login_activity", { p_email: email, p_success: !signInError });
 
     if (signInError) {
       setError(signInError.message);
@@ -54,7 +79,7 @@ export default function Login() {
           </div>
         </div>
 
-        {expired && !error && <ErrorNotice message="Your session expired. Please sign in again." />}
+        {reasonMessage && !error && <ErrorNotice message={reasonMessage} />}
         {error && <ErrorNotice message={error} />}
 
         <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
@@ -93,6 +118,10 @@ export default function Login() {
           <Button type="submit" size="lg" disabled={submitting} className="mt-2 w-full disabled:opacity-60">
             {submitting ? "Signing In..." : "Sign In"}
           </Button>
+
+          <Link to="/forgot-password" className="text-center text-xs font-semibold uppercase tracking-wide text-steel-400 hover:text-white">
+            Forgot Password?
+          </Link>
         </form>
 
         <Link to="/" className="mt-6 block text-center text-xs font-semibold uppercase tracking-wide text-steel-400 hover:text-white">

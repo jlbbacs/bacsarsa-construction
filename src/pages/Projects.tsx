@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { ChevronLeft, ChevronRight, MapPin, User, CalendarDays } from "lucide-react";
 import { SEO } from "../components/SEO";
 import { Container } from "../components/Container";
@@ -24,6 +25,8 @@ export default function Projects() {
   const [descriptionExpanded, setDescriptionExpanded] = useState(false);
   const [descriptionOverflows, setDescriptionOverflows] = useState(false);
   const descriptionRef = useRef<HTMLParagraphElement>(null);
+  const [searchParams] = useSearchParams();
+  const appliedDeepLinkRef = useRef(false);
 
   const filtered = useMemo(
     () => (activeCategory === "All" ? projects : projects.filter((p) => p.category === activeCategory)),
@@ -33,6 +36,17 @@ export default function Projects() {
   useEffect(() => {
     setSelectedIndex(null);
   }, [activeCategory]);
+
+  useEffect(() => {
+    if (appliedDeepLinkRef.current) return;
+    const projectId = searchParams.get("project");
+    if (!projectId) return;
+    const idx = filtered.findIndex((p) => p.id === projectId);
+    if (idx !== -1) {
+      setSelectedIndex(idx);
+      appliedDeepLinkRef.current = true;
+    }
+  }, [filtered, searchParams]);
 
   function showPrev() {
     setSelectedIndex((i) => (i === null ? null : (i - 1 + filtered.length) % filtered.length));
