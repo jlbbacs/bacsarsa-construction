@@ -1,0 +1,207 @@
+@import "tailwindcss";
+
+@theme {
+  /* Safety orange - primary CTA/accent */
+  --color-safety-50: #fdf1e9;
+  --color-safety-100: #fbdfc9;
+  --color-safety-400: #ee7c2f;
+  --color-safety-500: #e8590c;
+  --color-safety-600: #c4470a;
+  --color-safety-700: #9c3808;
+
+  /* Amber - secondary accent, used sparingly */
+  --color-amber-400: #f2a93b;
+  --color-amber-500: #dc9420;
+
+  /* Charcoal/steel - dark neutrals */
+  --color-charcoal-900: #1a1d21;
+  --color-charcoal-800: #24282d;
+  --color-charcoal-700: #313640;
+  --color-steel-600: #4a5561;
+  --color-steel-400: #7c8896;
+  --color-steel-200: #c3cbd3;
+
+  /* Concrete - light neutrals */
+  --color-concrete-50: #f7f5f2;
+  --color-concrete-100: #edeae4;
+  --color-concrete-200: #ddd8ce;
+
+  --font-heading: "Oswald", "Arial Narrow", sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "Roboto Mono", ui-monospace, monospace;
+
+  --animate-fade-in-up: fade-in-up 0.6s ease-out both;
+
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--color-charcoal-900);
+    background: var(--color-concrete-50);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-heading);
+    text-wrap: balance;
+  }
+}
+
+/* react-markdown output inside blog posts */
+.prose-post :where(h2, h3, h4) {
+  font-family: var(--font-heading);
+  color: var(--color-charcoal-900);
+  margin-top: 1.75em;
+  margin-bottom: 0.6em;
+  font-weight: 600;
+}
+.prose-post h2 {
+  font-size: 1.5rem;
+}
+.prose-post h3 {
+  font-size: 1.25rem;
+}
+.prose-post p {
+  margin: 1em 0;
+  line-height: 1.75;
+  color: var(--color-charcoal-800);
+}
+.prose-post a {
+  color: var(--color-safety-600);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.prose-post ul,
+.prose-post ol {
+  margin: 1em 0;
+  padding-left: 1.5em;
+}
+.prose-post ul {
+  list-style: disc;
+}
+.prose-post ol {
+  list-style: decimal;
+}
+.prose-post img {
+  border-radius: 0.5rem;
+  margin: 1.5em 0;
+}
+.prose-post blockquote {
+  border-left: 3px solid var(--color-safety-500);
+  padding-left: 1em;
+  margin: 1.5em 0;
+  color: var(--color-steel-600);
+  font-style: italic;
+}
+.prose-post code {
+  background: var(--color-concrete-100);
+  padding: 0.15em 0.4em;
+  border-radius: 0.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+}
+.prose-post table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5em 0;
+}
+.prose-post th,
+.prose-post td {
+  border: 1px solid var(--color-concrete-200);
+  padding: 0.5em 0.75em;
+  text-align: left;
+}
+.prose-post th {
+  background: var(--color-concrete-50);
+  font-family: var(--font-heading);
+}
+.prose-post mark {
+  background: var(--color-amber-400);
+  color: var(--color-charcoal-900);
+  padding: 0.05em 0.15em;
+  border-radius: 0.15rem;
+}
+.prose-post hr {
+  border: none;
+  border-top: 1px solid var(--color-concrete-200);
+  margin: 2em 0;
+}
+.prose-post ul[data-type="taskList"] {
+  list-style: none;
+  padding-left: 0;
+}
+.prose-post ul[data-type="taskList"] li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5em;
+}
+.prose-post ul[data-type="taskList"] li > label {
+  margin-top: 0.3em;
+}
+
+/* Callout boxes inserted from the blog post rich text editor */
+.prose-post [data-callout] {
+  margin: 1.5em 0;
+  padding: 0.9em 1.1em;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+}
+.prose-post [data-callout] p {
+  margin: 0;
+}
+.prose-post [data-callout="info"] {
+  background: color-mix(in srgb, var(--color-steel-400) 12%, white);
+  border-color: color-mix(in srgb, var(--color-steel-400) 35%, white);
+}
+.prose-post [data-callout="warning"] {
+  background: color-mix(in srgb, var(--color-amber-400) 15%, white);
+  border-color: color-mix(in srgb, var(--color-amber-400) 45%, white);
+}
+.prose-post [data-callout="success"] {
+  background: color-mix(in srgb, #1a9c5f 12%, white);
+  border-color: color-mix(in srgb, #1a9c5f 35%, white);
+}
+.prose-post [data-callout="tip"] {
+  background: color-mix(in srgb, var(--color-safety-400) 12%, white);
+  border-color: color-mix(in srgb, var(--color-safety-400) 35%, white);
+}
+
+/* Tiptap editor chrome (admin only) */
+.tiptap.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+  color: var(--color-steel-400);
+}
+.tiptap.ProseMirror .selectedCell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--color-safety-500) 12%, transparent);
+  pointer-events: none;
+}
+.tiptap.ProseMirror table {
+  position: relative;
+}
+.tiptap.ProseMirror td,
+.tiptap.ProseMirror th {
+  position: relative;
+}
