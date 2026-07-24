@@ -1,10 +1,11 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { HardHat, Lock, Mail } from "lucide-react";
+import { HardHat, Mail } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { ErrorNotice } from "../components/ErrorNotice";
 import { Button } from "../components/Button";
+import { PasswordInput } from "../components/PasswordInput";
 import { useSiteSettingsContext } from "../context/SiteSettingsContext";
 
 const REASON_MESSAGES: Record<string, string> = {
@@ -122,18 +123,7 @@ export default function Login() {
 
           <label className="flex flex-col gap-1.5 text-sm font-semibold text-steel-200">
             Password
-            <div className="relative">
-              <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-steel-400" />
-              <input
-                type="password"
-                required
-                autoComplete="current-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-md border border-charcoal-700 bg-charcoal-900 py-2.5 pl-9 pr-4 text-sm font-normal text-white outline-none focus:border-safety-500"
-                placeholder="••••••••"
-              />
-            </div>
+            <PasswordInput value={password} onChange={setPassword} variant="dark" autoComplete="current-password" required />
           </label>
 
           <Button type="submit" size="lg" disabled={submitting} className="mt-2 w-full disabled:opacity-60">
