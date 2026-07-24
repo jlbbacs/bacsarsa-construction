@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Users as UsersIcon, Pencil, Trash2, Ban, CheckCircle2, Lock, Mail, Search } from "lucide-react";
 import { supabase } from "../../lib/supabase";
+import { callAdminUsers } from "../../lib/adminUsersApi";
 import { useUsers } from "../../hooks/useUsers";
 import { useCurrentProfile } from "../../context/ProfileContext";
 import { useToast } from "../../context/ToastContext";
@@ -65,12 +66,6 @@ export function UsersPanel() {
       setter(v);
       setPage(0);
     };
-  }
-
-  async function callAdminUsers(action: string, body: Record<string, unknown>) {
-    const { data, error } = await supabase.functions.invoke(`admin-users?action=${action}`, { body });
-    const responseError = (data as { error?: string } | null)?.error ?? error?.message;
-    if (responseError) throw new Error(responseError);
   }
 
   async function handleConfirmAction() {

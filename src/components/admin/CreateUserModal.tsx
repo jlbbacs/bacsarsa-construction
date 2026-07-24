@@ -2,7 +2,7 @@ import { useState, type FormEvent } from "react";
 import { Modal } from "../Modal";
 import { Button } from "../Button";
 import { ErrorNotice } from "../ErrorNotice";
-import { supabase } from "../../lib/supabase";
+import { callAdminUsers } from "../../lib/adminUsersApi";
 import { useToast } from "../../context/ToastContext";
 
 const inputClass =
@@ -37,28 +37,23 @@ export function CreateUserModal({ open, onClose, onCreated }: { open: boolean; o
     setError(null);
     setSubmitting(true);
 
-    const { data, error: invokeError } = await supabase.functions.invoke("admin-users?action=create", {
-      body: {
+    try {
+      await callAdminUsers("create", {
         first_name: firstName.trim(),
         last_name: lastName.trim(),
         username: username.trim(),
         email: email.trim(),
         phone: phone.trim() || undefined,
-      },
-    });
-
-    setSubmitting(false);
-
-    const responseError = (data as { error?: string } | null)?.error ?? invokeError?.message;
-    if (responseError) {
-      setError(responseError);
-      return;
+      });
+      toast.success(`Invited ${email.trim()} as an Administrator.`);
+      reset();
+      onCreated();
+      onClose();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong.");
+    } finally {
+      setSubmitting(false);
     }
-
-    toast.success(`Invited ${email.trim()} as an Administrator.`);
-    reset();
-    onCreated();
-    onClose();
   }
 
   return (
