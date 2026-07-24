@@ -144,7 +144,10 @@ export function UsersPanel() {
     },
     enable: {
       title: "Enable User",
-      message: (u) => `Restore login access for ${u.username}?`,
+      message: (u) =>
+        u.status === "pending_verification"
+          ? `Mark ${u.username} as Active without waiting for email verification? Only do this if you've confirmed they can already sign in.`
+          : `Restore login access for ${u.username}?`,
       label: "Enable",
     },
     unlock: {
@@ -303,7 +306,10 @@ export function UsersPanel() {
                           </button>
                         )}
 
-                        {!isSelf && (user.status === "disabled" || user.status === "suspended") && (
+                        {!isSelf &&
+                          (user.status === "disabled" ||
+                            user.status === "suspended" ||
+                            user.status === "pending_verification") && (
                           <button
                             type="button"
                             onClick={() => setPendingAction({ type: "enable", user })}

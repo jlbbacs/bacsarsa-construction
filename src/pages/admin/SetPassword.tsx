@@ -54,7 +54,13 @@ export default function SetPassword() {
       return;
     }
 
-    await supabase.rpc("clear_force_password_change");
+    // The database trigger on auth.users (024) already guarantees the
+    // account flips to active the moment the password above is set, so
+    // this call is only for the activity-log entry -- if it fails, that's
+    // a minor logging gap, not a reason to block the user from continuing.
+    const { error: clearError } = await supabase.rpc("clear_force_password_change");
+    if (clearError) console.error("clear_force_password_change failed:", clearError.message);
+
     setSubmitting(false);
     navigate("/dashboard", { replace: true });
   }
