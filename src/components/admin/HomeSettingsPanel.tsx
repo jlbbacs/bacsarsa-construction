@@ -95,7 +95,7 @@ export function HomeSettingsPanel() {
             />
           </label>
 
-          <div className="grid grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <label className="flex flex-col gap-1.5 text-sm font-semibold text-charcoal-900">
               Primary CTA Text
               <input value={config.hero_cta_text} onChange={(e) => update("hero_cta_text", e.target.value)} className={inputClass} />
@@ -106,7 +106,7 @@ export function HomeSettingsPanel() {
             </label>
           </div>
 
-          <div className="grid grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <label className="flex flex-col gap-1.5 text-sm font-semibold text-charcoal-900">
               Secondary CTA Text
               <input

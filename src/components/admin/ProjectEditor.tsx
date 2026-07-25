@@ -100,7 +100,7 @@ export function ProjectEditor({
             />
           </label>
 
-          <div className="grid grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <label className="flex flex-col gap-1.5 text-sm font-semibold text-charcoal-900">
               Location
               <input value={location} onChange={(e) => setLocation(e.target.value)} className={inputClass} placeholder="City, ST" />

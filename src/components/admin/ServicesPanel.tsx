@@ -61,7 +61,7 @@ export function ServicesPanel() {
           <p className="text-sm text-steel-600">No services yet -- add your first one.</p>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-md border border-concrete-200 bg-white">
+        <div className="overflow-x-auto rounded-md border border-concrete-200 bg-white">
           <table className="w-full text-left text-sm">
             <thead className="border-b border-concrete-200 bg-concrete-50 text-xs font-semibold uppercase tracking-wide text-steel-600">
               <tr>

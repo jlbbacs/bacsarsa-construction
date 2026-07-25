@@ -11,6 +11,16 @@ import { useServices } from "../hooks/useServices";
 import { useProjects } from "../hooks/useProjects";
 import { useBlogPosts } from "../hooks/useBlogPosts";
 import { useSiteSettingsContext } from "../context/SiteSettingsContext";
+import { AdminHeader } from "../components/admin/AdminHeader";
+
+// TEMP DEV-ONLY RESPONSIVE CHECK -- removed before commit.
+function DevAdminHeaderHarness() {
+  return (
+    <div id="dev-admin-header-harness">
+      <AdminHeader tab="posts" onTabChange={() => {}} />
+    </div>
+  );
+}
 
 export default function Home() {
   const { config, loading: configLoading } = useHomeConfig();
@@ -21,6 +31,7 @@ export default function Home() {
 
   return (
     <>
+      <DevAdminHeaderHarness />
       <SEO
         title="Home"
         description={`${settings.brand_name} delivers commercial, residential, and industrial construction projects on time and on budget.`}

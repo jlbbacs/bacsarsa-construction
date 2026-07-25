@@ -67,7 +67,7 @@ export function EditUserModal({
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           {error && <ErrorNotice message={error} />}
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <label className="flex flex-col gap-1.5 text-sm font-semibold text-charcoal-900">
               First Name
               <input required value={firstName} onChange={(e) => setFirstName(e.target.value)} className={inputClass} />

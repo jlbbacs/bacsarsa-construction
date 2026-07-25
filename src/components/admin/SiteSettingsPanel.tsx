@@ -56,7 +56,7 @@ export function SiteSettingsPanel() {
         <div className="flex flex-col gap-5 lg:col-span-2">
           <span className="text-sm font-bold uppercase tracking-wide text-charcoal-900">Branding</span>
 
-          <div className="grid grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <label className="flex flex-col gap-1.5 text-sm font-semibold text-charcoal-900">
               Brand Name
               <input value={current.brand_name} onChange={(e) => update("brand_name", e.target.value)} className={inputClass} />
@@ -71,7 +71,7 @@ export function SiteSettingsPanel() {
             Contact Details
           </span>
 
-          <div className="grid grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <label className="flex flex-col gap-1.5 text-sm font-semibold text-charcoal-900">
               Phone
               <input value={current.phone} onChange={(e) => update("phone", e.target.value)} className={inputClass} />
@@ -91,7 +91,7 @@ export function SiteSettingsPanel() {
             Social Links
           </span>
 
-          <div className="grid grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
             <label className="flex flex-col gap-1.5 text-sm font-semibold text-charcoal-900">
               Facebook URL
               <input
@@ -136,7 +136,7 @@ export function SiteSettingsPanel() {
             dark background.
           </p>
 
-          <div className="grid grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <ImageUploadField
               label="Services Page"
               bucket="site-images"

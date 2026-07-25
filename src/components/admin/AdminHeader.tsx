@@ -60,27 +60,33 @@ export function AdminHeader({
 
   return (
     <header className="bg-charcoal-900">
-      <Container className="flex h-16 items-center justify-between">
-        <div className="flex items-center gap-2.5 font-heading text-lg font-semibold text-white">
+      <Container className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 py-3">
+        <div className="flex min-w-0 items-center gap-2.5 font-heading text-base font-semibold text-white sm:text-lg">
           {settings.logo_url ? (
-            <img src={settings.logo_url} alt={settings.brand_name} className="h-9 w-9 rounded-md object-contain" />
+            <img
+              src={settings.logo_url}
+              alt={settings.brand_name}
+              className="h-8 w-8 shrink-0 rounded-md object-contain sm:h-9 sm:w-9"
+            />
           ) : (
-            <span className="flex h-9 w-9 items-center justify-center rounded-md bg-safety-500 text-white">
-              <HardHat className="h-5 w-5" />
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-safety-500 text-white sm:h-9 sm:w-9">
+              <HardHat className="h-4 w-4 sm:h-5 sm:w-5" />
             </span>
           )}
-          {settings.brand_name}
-          <span className="ml-1 text-xs font-semibold uppercase tracking-wide text-steel-400">Admin</span>
+          <span className="truncate">{settings.brand_name}</span>
+          <span className="hidden shrink-0 text-xs font-semibold uppercase tracking-wide text-steel-400 sm:ml-1 sm:inline">
+            Admin
+          </span>
         </div>
 
-        <div className="flex items-center gap-6">
-          <Link to="/" className="text-sm font-semibold text-steel-200 hover:text-white">
+        <div className="flex shrink-0 items-center gap-4 sm:gap-6">
+          <Link to="/" className="text-xs font-semibold text-steel-200 hover:text-white sm:text-sm">
             View Site
           </Link>
           <button
             type="button"
             onClick={handleLogout}
-            className="flex items-center gap-2 text-sm font-semibold text-steel-200 hover:text-white"
+            className="flex items-center gap-1.5 text-xs font-semibold text-steel-200 hover:text-white sm:gap-2 sm:text-sm"
           >
             <LogOut className="h-4 w-4" />
             Logout
@@ -88,19 +94,21 @@ export function AdminHeader({
         </div>
       </Container>
 
-      <Container className="flex flex-wrap gap-1 pb-0">
-        {visibleTabs.map((t) => (
-          <button
-            key={t}
-            type="button"
-            onClick={() => onTabChange(t)}
-            className={`rounded-t-md px-4 py-2.5 text-sm font-semibold transition-colors ${
-              tab === t ? "bg-concrete-50 text-charcoal-900" : "text-steel-400 hover:text-white"
-            }`}
-          >
-            {TAB_LABELS[t]}
-          </button>
-        ))}
+      <Container className="overflow-x-auto">
+        <div className="flex w-max min-w-full gap-1">
+          {visibleTabs.map((t) => (
+            <button
+              key={t}
+              type="button"
+              onClick={() => onTabChange(t)}
+              className={`shrink-0 whitespace-nowrap rounded-t-md px-4 py-2.5 text-sm font-semibold transition-colors ${
+                tab === t ? "bg-concrete-50 text-charcoal-900" : "text-steel-400 hover:text-white"
+              }`}
+            >
+              {TAB_LABELS[t]}
+            </button>
+          ))}
+        </div>
       </Container>
     </header>
   );
