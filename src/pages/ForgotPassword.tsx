@@ -37,7 +37,7 @@ export default function ForgotPassword() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-charcoal-900 px-4 py-16">
       <Helmet>
-        <title>Forgot Password | {settings.brand_name}</title>
+        <title>{`Forgot Password | ${settings.brand_name}`}</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
 

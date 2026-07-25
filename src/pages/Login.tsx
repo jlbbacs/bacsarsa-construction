@@ -76,16 +76,21 @@ export default function Login() {
   }
 
   if (sessionStorage.getItem("logging_out")) return <Navigate to="/login" replace />;
-  if (checkingSession) return null;
-  if (hasSession) return <Navigate to="/dashboard" replace />;
 
+  // Helmet is mounted unconditionally from the very first render, with the
+  // checkingSession/hasSession logic only swapping the BODY content below
+  // it -- keeps this consistent with the other auth pages rather than
+  // gating Helmet itself behind an async check.
   return (
     <div className="flex min-h-screen items-center justify-center bg-charcoal-900 px-4 py-16">
       <Helmet>
-        <title>Admin Login | {settings.brand_name}</title>
+        <title>{`Admin Login | ${settings.brand_name}`}</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
 
+      {checkingSession ? null : hasSession ? (
+        <Navigate to="/dashboard" replace />
+      ) : (
       <div className="w-full max-w-sm rounded-md border border-charcoal-700 bg-charcoal-800 p-8">
         <div className="mb-8 flex flex-col items-center gap-3 text-center">
           {settings.logo_url ? (
@@ -139,6 +144,7 @@ export default function Login() {
           Back To Site
         </Link>
       </div>
+      )}
     </div>
   );
 }

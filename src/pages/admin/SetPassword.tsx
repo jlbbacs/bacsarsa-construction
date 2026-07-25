@@ -68,7 +68,7 @@ export default function SetPassword() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-charcoal-900 px-4 py-16">
       <Helmet>
-        <title>Set Your Password | {settings.brand_name}</title>
+        <title>{`Set Your Password | ${settings.brand_name}`}</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
 

@@ -33,7 +33,7 @@ export default function ConfirmChange() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-charcoal-900 px-4 py-16">
       <Helmet>
-        <title>Confirm Change | {settings.brand_name}</title>
+        <title>{`Confirm Change | ${settings.brand_name}`}</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
 

@@ -92,7 +92,7 @@ begin
   v_code := lpad(floor(random() * 1000000)::text, 6, '0');
 
   insert into verification_tokens (user_id, type, code_hash, expires_at)
-  values (auth.uid(), 'otp_superadmin', encode(digest(v_code, 'sha256'), 'hex'), now() + interval '10 minutes')
+  values (auth.uid(), 'otp_superadmin', encode(digest(v_code::bytea, 'sha256'), 'hex'), now() + interval '10 minutes')
   on conflict (user_id, type) do update set
     code_hash = excluded.code_hash,
     expires_at = excluded.expires_at,
@@ -124,7 +124,7 @@ begin
   if v_row.id is null or v_row.used_at is not null or v_row.expires_at < now() then
     return false;
   end if;
-  if v_row.code_hash <> encode(digest(p_code, 'sha256'), 'hex') then
+  if v_row.code_hash <> encode(digest(p_code::bytea, 'sha256'), 'hex') then
     return false;
   end if;
 
