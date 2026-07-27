@@ -12,7 +12,7 @@ import { BLOG_STATUS_BADGE_CLASSES } from "../../lib/blogStatus";
 import type { BlogCategory, BlogPost, BlogPostStatus, BlogTag } from "../../types";
 
 const inputClass =
-  "rounded-md border border-concrete-200 px-4 py-2.5 text-sm font-normal outline-none focus:border-safety-500 focus-visible:ring-2 focus-visible:ring-safety-500 focus-visible:ring-offset-2";
+  "w-full rounded-md border border-concrete-200 px-4 py-2.5 text-sm font-normal outline-none focus:border-safety-500 focus-visible:ring-2 focus-visible:ring-safety-500 focus-visible:ring-offset-2";
 
 const STATUS_OPTIONS: { value: BlogPostStatus; label: string }[] = [
   { value: "draft", label: "Draft" },
