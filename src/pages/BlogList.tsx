@@ -10,6 +10,7 @@ import { PageLoader } from "../components/PageLoader";
 import { useBlogPosts } from "../hooks/useBlogPosts";
 import { useBlogCategories } from "../hooks/useBlogCategories";
 import { useSiteSettingsContext } from "../context/SiteSettingsContext";
+import { buildCollectionPage } from "../lib/schema";
 
 export default function BlogList() {
   const { categories } = useBlogCategories();
@@ -31,6 +32,11 @@ export default function BlogList() {
         title="Blog"
         description="News, project spotlights, and industry insights from our construction team."
         path="/blog"
+        jsonLd={buildCollectionPage({
+          name: `Blog | ${settings.brand_name}`,
+          description: "News, project spotlights, and industry insights from our construction team.",
+          path: "/blog",
+        })}
       />
 
       <PageHeader
@@ -38,6 +44,7 @@ export default function BlogList() {
         title="News & Insights"
         subtitle="Project spotlights, safety guidance, and company news from our team."
         imageUrl={settings.blog_header_image_url}
+        breadcrumbs={[{ name: "Blog", path: "/blog" }]}
       />
 
       <section className="bg-concrete-50 py-16 md:py-24">

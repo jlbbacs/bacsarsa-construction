@@ -1,3 +1,19 @@
+export interface DayHours {
+  open: string;
+  close: string;
+  closed: boolean;
+}
+
+export interface BusinessHours {
+  monday: DayHours;
+  tuesday: DayHours;
+  wednesday: DayHours;
+  thursday: DayHours;
+  friday: DayHours;
+  saturday: DayHours;
+  sunday: DayHours;
+}
+
 export interface SiteSettings {
   id: number;
   brand_name: string;
@@ -6,6 +22,12 @@ export interface SiteSettings {
   phone: string;
   email: string;
   address: string;
+  address_street: string;
+  address_city: string;
+  address_state: string;
+  address_postal_code: string;
+  address_country: string;
+  business_hours: BusinessHours;
   facebook_url: string | null;
   instagram_url: string | null;
   linkedin_url: string | null;
@@ -59,6 +81,7 @@ export interface ServiceCategory {
 export interface Service {
   id: string;
   title: string;
+  slug: string;
   description: string;
   icon_name: string;
   image_url: string | null;
@@ -73,6 +96,7 @@ export type ProjectCategory = "Commercial" | "Residential" | "Industrial";
 export interface Project {
   id: string;
   title: string;
+  slug: string;
   description: string;
   category: ProjectCategory;
   location: string | null;

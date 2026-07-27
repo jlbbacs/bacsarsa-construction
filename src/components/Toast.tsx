@@ -1,5 +1,5 @@
 import { createPortal } from "react-dom";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import { CheckCircle2, AlertTriangle, Info, X } from "lucide-react";
 
 export type ToastVariant = "success" | "error" | "info";
@@ -23,7 +23,7 @@ export function ToastViewport({ toasts, onDismiss }: { toasts: ToastItem[]; onDi
         {toasts.map((toast) => {
           const { icon: Icon, border, icon_color } = VARIANT_STYLES[toast.variant];
           return (
-            <motion.div
+            <m.div
               key={toast.id}
               initial={{ opacity: 0, y: 12, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -42,7 +42,7 @@ export function ToastViewport({ toasts, onDismiss }: { toasts: ToastItem[]; onDi
               >
                 <X className="h-3.5 w-3.5" />
               </button>
-            </motion.div>
+            </m.div>
           );
         })}
       </AnimatePresence>

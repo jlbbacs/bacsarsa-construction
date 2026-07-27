@@ -1,11 +1,14 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { MapPin } from "lucide-react";
 import type { Project } from "../types";
 
+// Uses only the approved palette shades; white text on these three passes
+// WCAG AA (4.5:1+) for this badge's small text -- bg-amber-500 (the previous
+// Residential color) was outside the approved palette and only hit 2.15:1.
 const CATEGORY_COLORS: Record<string, string> = {
-  Commercial: "bg-safety-500",
-  Residential: "bg-amber-500",
+  Commercial: "bg-safety-600",
+  Residential: "bg-charcoal-700",
   Industrial: "bg-steel-600",
 };
 
@@ -27,7 +30,13 @@ export function ProjectCard({
     <>
       <div className="relative flex h-48 items-center justify-center overflow-hidden bg-gradient-to-br from-charcoal-800 to-charcoal-900">
         {project.image_url ? (
-          <img src={project.image_url} alt={project.title} className="h-full w-full object-cover" />
+          <img
+            src={project.image_url}
+            alt={project.title}
+            className="h-full w-full object-cover"
+            loading="lazy"
+            decoding="async"
+          />
         ) : (
           <span className="font-heading text-4xl font-bold uppercase tracking-widest text-charcoal-700">
             {project.category}
@@ -55,7 +64,7 @@ export function ProjectCard({
   );
 
   return (
-    <motion.div
+    <m.div
       className="h-full"
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -72,6 +81,6 @@ export function ProjectCard({
           {content}
         </button>
       )}
-    </motion.div>
+    </m.div>
   );
 }

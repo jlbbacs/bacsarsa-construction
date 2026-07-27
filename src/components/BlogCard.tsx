@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Calendar, Newspaper } from "lucide-react";
 import type { BlogPost } from "../types";
 
@@ -10,7 +10,7 @@ function formatDate(iso: string | null) {
 
 export function BlogCard({ post, index = 0 }: { post: BlogPost; index?: number }) {
   return (
-    <motion.article
+    <m.article
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -20,7 +20,13 @@ export function BlogCard({ post, index = 0 }: { post: BlogPost; index?: number }
     >
       <Link to={`/blog/${post.slug}`} className="flex h-44 items-center justify-center overflow-hidden bg-gradient-to-br from-charcoal-800 to-charcoal-900">
         {post.featured_image_url ? (
-          <img src={post.featured_image_url} alt={post.title} className="h-full w-full object-cover" />
+          <img
+            src={post.featured_image_url}
+            alt={post.title}
+            className="h-full w-full object-cover"
+            loading="lazy"
+            decoding="async"
+          />
         ) : (
           <Newspaper className="h-10 w-10 text-charcoal-700" />
         )}
@@ -42,6 +48,6 @@ export function BlogCard({ post, index = 0 }: { post: BlogPost; index?: number }
           {formatDate(post.published_at)}
         </span>
       </div>
-    </motion.article>
+    </m.article>
   );
 }

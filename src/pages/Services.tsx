@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { SEO } from "../components/SEO";
 import { Container } from "../components/Container";
@@ -10,6 +11,7 @@ import { getServiceIcon } from "../lib/serviceIcons";
 import { useServices } from "../hooks/useServices";
 import { useServiceCategories } from "../hooks/useServiceCategories";
 import { useSiteSettingsContext } from "../context/SiteSettingsContext";
+import { buildCollectionPage, buildService } from "../lib/schema";
 import type { Service } from "../types";
 
 type ActiveCategory = { id: string; name: string; icon_name: string };
@@ -22,15 +24,19 @@ export default function Services() {
   const { settings } = useSiteSettingsContext();
   const [activeCategory, setActiveCategory] = useState<ActiveCategory | null>(null);
   const [selectedService, setSelectedService] = useState<Service | null>(null);
+  const { slug } = useParams<{ slug?: string }>();
+  const navigate = useNavigate();
 
   function openCategory(category: ActiveCategory) {
     setSelectedService(null);
     setActiveCategory(category);
+    if (slug) navigate("/services");
   }
 
   function closeModal() {
     setActiveCategory(null);
     setSelectedService(null);
+    if (slug) navigate("/services");
   }
 
   const loading = servicesLoading || categoriesLoading;
@@ -42,12 +48,41 @@ export default function Services() {
 
   const uncategorized = services.filter((s) => !s.category_id);
 
+  // Resolves a direct /services/:slug link (or a card click that navigated
+  // here) to the matching service + its category, opening the same drawer
+  // the "click a category, then a service" flow produces.
+  useEffect(() => {
+    if (!slug || loading) return;
+    const service = services.find((s) => s.slug === slug);
+    if (!service) return;
+    const category = service.category_id
+      ? categories.find((c) => c.id === service.category_id)
+      : undefined;
+    setActiveCategory(category ? { id: category.id, name: category.name, icon_name: category.icon_name } : UNCATEGORIZED);
+    setSelectedService(service);
+  }, [slug, services, categories, loading]);
+
   return (
     <>
       <SEO
-        title="Services"
-        description="Commercial construction, residential building, industrial projects, renovations, and project management services."
-        path="/services"
+        title={selectedService ? selectedService.title : "Services"}
+        description={
+          selectedService
+            ? selectedService.description
+            : "Commercial construction, residential building, industrial projects, renovations, and project management services."
+        }
+        image={selectedService?.image_url}
+        path={selectedService ? `/services/${selectedService.slug}` : "/services"}
+        jsonLd={
+          selectedService
+            ? buildService(selectedService, settings)
+            : buildCollectionPage({
+                name: `Services | ${settings.brand_name}`,
+                description:
+                  "Commercial construction, residential building, industrial projects, renovations, and project management services.",
+                path: "/services",
+              })
+        }
       />
 
       <PageHeader
@@ -55,6 +90,11 @@ export default function Services() {
         title="Full-Service Construction Services"
         subtitle="From ground-up builds to renovations, we handle every phase of the project under one roof."
         imageUrl={settings.services_header_image_url}
+        breadcrumbs={
+          selectedService
+            ? [{ name: "Services", path: "/services" }, { name: selectedService.title, path: `/services/${selectedService.slug}` }]
+            : [{ name: "Services", path: "/services" }]
+        }
       />
 
       <section className="bg-concrete-50 py-16 md:py-24">
@@ -139,7 +179,10 @@ export default function Services() {
           <div className="flex flex-col gap-5">
             <button
               type="button"
-              onClick={() => setSelectedService(null)}
+              onClick={() => {
+                setSelectedService(null);
+                navigate("/services");
+              }}
               className="flex w-fit items-center gap-2 text-xs font-semibold uppercase tracking-wide text-steel-600 hover:text-charcoal-900"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
@@ -151,6 +194,8 @@ export default function Services() {
                 src={selectedService.image_url}
                 alt={selectedService.title}
                 className="aspect-video w-full rounded-md object-cover"
+                loading="lazy"
+                decoding="async"
               />
             )}
 
@@ -179,10 +224,9 @@ export default function Services() {
               {servicesFor(activeCategory).map((service) => {
                 const Icon = getServiceIcon(service.icon_name);
                 return (
-                  <button
+                  <Link
                     key={service.id}
-                    type="button"
-                    onClick={() => setSelectedService(service)}
+                    to={`/services/${service.slug}`}
                     className="flex items-center gap-4 py-4 text-left first:pt-0 last:pb-0"
                   >
                     <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-charcoal-900 text-safety-500">
@@ -193,7 +237,7 @@ export default function Services() {
                       <p className="text-sm leading-relaxed text-steel-600">{service.description}</p>
                     </div>
                     <ArrowRight className="h-4 w-4 shrink-0 text-steel-400" />
-                  </button>
+                  </Link>
                 );
               })}
             </div>

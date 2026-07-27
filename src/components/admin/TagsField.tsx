@@ -99,7 +99,7 @@ export function TagsField({
           onKeyDown={handleKeyDown}
           disabled={creating}
           placeholder="Type a tag and press Enter (creates it if new)"
-          className="w-full rounded-md border border-concrete-200 px-4 py-2.5 text-sm font-normal outline-none focus:border-safety-500 disabled:opacity-60"
+          className="w-full rounded-md border border-concrete-200 px-4 py-2.5 text-sm font-normal outline-none focus:border-safety-500 focus-visible:ring-2 focus-visible:ring-safety-500 focus-visible:ring-offset-2 disabled:opacity-60"
         />
         {suggestions.length > 0 && (
           <ul className="absolute z-10 mt-1 w-full overflow-hidden rounded-md border border-concrete-200 bg-white shadow-lg">

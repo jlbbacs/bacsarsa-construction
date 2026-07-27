@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import { ButtonLink } from "../Button";
 import { Container } from "../Container";
@@ -18,7 +18,14 @@ export function HeroSection({ config }: { config: HomeConfig }) {
           playsInline
         />
       ) : config.hero_image_url ? (
-        <img src={config.hero_image_url} alt="" className="absolute inset-0 h-full w-full object-cover" />
+        <img
+          src={config.hero_image_url}
+          alt=""
+          className="absolute inset-0 h-full w-full object-cover"
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
+        />
       ) : (
         <>
           <div
@@ -37,7 +44,7 @@ export function HeroSection({ config }: { config: HomeConfig }) {
       )}
 
       <Container className="relative flex flex-col gap-8 py-20 sm:py-28 lg:py-36">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -45,27 +52,27 @@ export function HeroSection({ config }: { config: HomeConfig }) {
         >
           <ShieldCheck className="h-3.5 w-3.5" />
           Licensed &amp; Insured General Contractor
-        </motion.div>
+        </m.div>
 
-        <motion.h1
+        <m.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
           className="max-w-3xl font-heading text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl"
         >
           {config.hero_heading}
-        </motion.h1>
+        </m.h1>
 
-        <motion.p
+        <m.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
           className="max-w-xl text-base leading-relaxed text-steel-200 sm:text-lg"
         >
           {config.hero_subheading}
-        </motion.p>
+        </m.p>
 
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
@@ -78,7 +85,7 @@ export function HeroSection({ config }: { config: HomeConfig }) {
           <ButtonLink to={config.secondary_cta_link} variant="secondary" size="lg" className="border-white text-white hover:bg-white hover:text-charcoal-900">
             {config.secondary_cta_text}
           </ButtonLink>
-        </motion.div>
+        </m.div>
       </Container>
     </section>
   );

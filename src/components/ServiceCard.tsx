@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import type { Service } from "../types";
 import { getServiceIcon } from "../lib/serviceIcons";
 
@@ -6,7 +6,7 @@ export function ServiceCard({ service, index = 0 }: { service: Service; index?: 
   const Icon = getServiceIcon(service.icon_name);
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -19,6 +19,6 @@ export function ServiceCard({ service, index = 0 }: { service: Service; index?: 
       </span>
       <h3 className="font-heading text-lg font-semibold text-charcoal-900">{service.title}</h3>
       <p className="text-sm leading-relaxed text-steel-600">{service.description}</p>
-    </motion.div>
+    </m.div>
   );
 }

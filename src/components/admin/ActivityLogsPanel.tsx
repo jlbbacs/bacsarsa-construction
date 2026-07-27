@@ -75,7 +75,7 @@ export function ActivityLogsPanel() {
               setPage(0);
             }}
             placeholder="Search by user, action, or IP..."
-            className="w-full rounded-md border border-concrete-200 py-2 pl-9 pr-3 text-sm outline-none focus:border-safety-500"
+            className="w-full rounded-md border border-concrete-200 py-2 pl-9 pr-3 text-sm outline-none focus:border-safety-500 focus-visible:ring-2 focus-visible:ring-safety-500 focus-visible:ring-offset-2"
           />
         </div>
         <select
@@ -84,7 +84,7 @@ export function ActivityLogsPanel() {
             setActionFilter(e.target.value);
             setPage(0);
           }}
-          className="rounded-md border border-concrete-200 py-2 px-3 text-sm outline-none focus:border-safety-500"
+          className="rounded-md border border-concrete-200 py-2 px-3 text-sm outline-none focus:border-safety-500 focus-visible:ring-2 focus-visible:ring-safety-500 focus-visible:ring-offset-2"
         >
           <option value="all">All Actions</option>
           {actionOptions.map((a) => (

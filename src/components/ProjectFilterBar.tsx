@@ -16,7 +16,7 @@ export function ProjectFilterBar({
           onClick={() => onChange(category)}
           className={`rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-wide transition-colors ${
             active === category
-              ? "bg-safety-500 text-white"
+              ? "bg-safety-600 text-white"
               : "bg-white text-charcoal-800 ring-1 ring-inset ring-concrete-200 hover:bg-concrete-50"
           }`}
         >

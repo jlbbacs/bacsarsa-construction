@@ -1,11 +1,11 @@
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import type { AboutStat } from "../types";
 
 export function StatsStrip({ stats }: { stats: AboutStat[] }) {
   return (
     <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
       {stats.map((stat, i) => (
-        <motion.div
+        <m.div
           key={stat.label}
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -15,7 +15,7 @@ export function StatsStrip({ stats }: { stats: AboutStat[] }) {
         >
           <span className="font-mono text-3xl font-semibold text-charcoal-900 sm:text-4xl">{stat.value}</span>
           <span className="text-xs font-semibold uppercase tracking-wide text-steel-600">{stat.label}</span>
-        </motion.div>
+        </m.div>
       ))}
     </div>
   );

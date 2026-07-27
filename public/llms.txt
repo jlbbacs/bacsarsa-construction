@@ -1,0 +1,16 @@
+# Construction Company Website
+
+> A licensed and insured general contractor offering commercial, residential, and industrial construction services.
+
+## Pages
+
+- [Home](/): Overview of services, featured projects, and company introduction.
+- [About](/about): Company history, mission, and team.
+- [Services](/services): Full list of construction services offered.
+- [Projects](/projects): Portfolio of completed commercial, residential, and industrial projects.
+- [Blog](/blog): Company news, project spotlights, and industry insights.
+- [Contact](/contact): Contact form, phone, email, and office address.
+
+Note: this is a placeholder shown only in local development. Production builds
+generate this file dynamically (scripts/generate-llms-txt.mjs) with the real
+brand name, summary, and recent blog posts.

@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { HardHat, Mail, MapPin, Phone } from "lucide-react";
 import { useSiteSettingsContext } from "../context/SiteSettingsContext";
+import { formatAddress } from "../lib/address";
+import { trackEmailClick, trackPhoneClick } from "../lib/analytics";
 import { Container } from "./Container";
 import { FacebookIcon, InstagramIcon, LinkedinIcon } from "./icons/SocialIcons";
 
@@ -23,7 +25,13 @@ export function Footer() {
         <div className="flex flex-col gap-4">
           <Link to="/" className="flex items-center gap-2.5 font-heading text-lg font-semibold text-white">
             {settings.logo_url ? (
-              <img src={settings.logo_url} alt={settings.brand_name} className="h-9 w-9 rounded-md object-contain" />
+              <img
+                src={settings.logo_url}
+                alt={settings.brand_name}
+                className="h-9 w-9 rounded-md object-contain"
+                loading="lazy"
+                decoding="async"
+              />
             ) : (
               <span className="flex h-9 w-9 items-center justify-center rounded-md bg-safety-500 text-white">
                 <HardHat className="h-5 w-5" />
@@ -64,17 +72,25 @@ export function Footer() {
 
         <div className="flex flex-col gap-4 border-t border-charcoal-800 pt-8 sm:border-0 sm:pt-0">
           <h3 className="font-heading text-sm font-semibold uppercase tracking-wide text-white">Contact</h3>
-          <a href={`tel:${settings.phone.replace(/[^\d+]/g, "")}`} className="flex items-start gap-2 text-sm text-steel-400 hover:text-white">
+          <a
+            href={`tel:${settings.phone.replace(/[^\d+]/g, "")}`}
+            onClick={() => trackPhoneClick()}
+            className="flex items-start gap-2 text-sm text-steel-400 hover:text-white"
+          >
             <Phone className="mt-0.5 h-4 w-4 shrink-0 text-safety-400" />
             {settings.phone}
           </a>
-          <a href={`mailto:${settings.email}`} className="flex items-start gap-2 text-sm text-steel-400 hover:text-white">
+          <a
+            href={`mailto:${settings.email}`}
+            onClick={() => trackEmailClick()}
+            className="flex items-start gap-2 text-sm text-steel-400 hover:text-white"
+          >
             <Mail className="mt-0.5 h-4 w-4 shrink-0 text-safety-400" />
             {settings.email}
           </a>
           <span className="flex items-start gap-2 text-sm text-steel-400">
             <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-safety-400" />
-            {settings.address}
+            {formatAddress(settings)}
           </span>
         </div>
       </Container>

@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import { HardHat, Menu, Phone, X } from "lucide-react";
 import { useSiteSettingsContext } from "../context/SiteSettingsContext";
+import { trackPhoneClick } from "../lib/analytics";
 import { Container } from "./Container";
 
 const NAV_LINKS = [
@@ -62,13 +63,17 @@ export function NavBar() {
         </nav>
 
         <div className="hidden items-center gap-4 lg:flex">
-          <a href={`tel:${settings.phone.replace(/[^\d+]/g, "")}`} className="flex items-center gap-2 text-sm font-semibold text-charcoal-900">
+          <a
+            href={`tel:${settings.phone.replace(/[^\d+]/g, "")}`}
+            onClick={() => trackPhoneClick()}
+            className="flex items-center gap-2 text-sm font-semibold text-charcoal-900"
+          >
             <Phone className="h-4 w-4 text-safety-500" />
             {settings.phone}
           </a>
           <Link
             to="/contact"
-            className="inline-flex items-center bg-safety-500 px-5 py-2.5 text-sm font-semibold uppercase tracking-wide text-white transition-colors hover:bg-safety-600"
+            className="inline-flex items-center bg-safety-600 px-5 py-2.5 text-sm font-semibold uppercase tracking-wide text-white transition-colors hover:bg-safety-700"
           >
             Get a Quote
           </Link>
@@ -86,7 +91,7 @@ export function NavBar() {
 
       <AnimatePresence>
         {mobileOpen && (
-          <motion.nav
+          <m.nav
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
@@ -112,12 +117,12 @@ export function NavBar() {
               <Link
                 to="/contact"
                 onClick={() => setMobileOpen(false)}
-                className="mt-2 inline-flex items-center justify-center bg-safety-500 px-5 py-3 text-sm font-semibold uppercase tracking-wide text-white"
+                className="mt-2 inline-flex items-center justify-center bg-safety-600 px-5 py-3 text-sm font-semibold uppercase tracking-wide text-white"
               >
                 Get a Quote
               </Link>
             </Container>
-          </motion.nav>
+          </m.nav>
         )}
       </AnimatePresence>
     </header>

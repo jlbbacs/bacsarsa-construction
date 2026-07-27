@@ -1,6 +1,7 @@
 import { ArrowRight, Phone } from "lucide-react";
 import { Container } from "../Container";
 import { ButtonLink } from "../Button";
+import { trackPhoneClick } from "../../lib/analytics";
 import type { SiteSettings } from "../../types";
 
 export function CTASection({ settings }: { settings: SiteSettings }) {
@@ -20,6 +21,7 @@ export function CTASection({ settings }: { settings: SiteSettings }) {
           </ButtonLink>
           <a
             href={`tel:${settings.phone.replace(/[^\d+]/g, "")}`}
+            onClick={() => trackPhoneClick()}
             className="inline-flex items-center gap-2 border-2 border-white px-7 py-3.5 text-base font-semibold uppercase tracking-wide text-white transition-colors hover:bg-white hover:text-safety-600"
           >
             <Phone className="h-4 w-4" />

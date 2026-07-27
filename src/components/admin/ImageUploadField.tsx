@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { ImagePlus, Loader2, X } from "lucide-react";
-import { deleteImage, uploadImage } from "../../lib/storage";
+import { compressImageToWebP, deleteImage, uploadImage } from "../../lib/storage";
 
 export function ImageUploadField({
   label,
@@ -22,7 +22,8 @@ export function ImageUploadField({
     setError(null);
     try {
       const previousUrl = value;
-      const newUrl = await uploadImage(file, bucket);
+      const compressed = await compressImageToWebP(file);
+      const newUrl = await uploadImage(compressed, bucket);
       onChange(newUrl);
       if (previousUrl) void deleteImage(previousUrl, bucket);
     } catch (err) {

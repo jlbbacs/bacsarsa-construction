@@ -4,10 +4,12 @@ interface SectionHeadingProps {
   subtitle?: string;
   align?: "left" | "center";
   light?: boolean;
+  as?: "h1" | "h2" | "h3";
 }
 
-export function SectionHeading({ eyebrow, title, subtitle, align = "left", light = false }: SectionHeadingProps) {
+export function SectionHeading({ eyebrow, title, subtitle, align = "left", light = false, as = "h2" }: SectionHeadingProps) {
   const alignClass = align === "center" ? "text-center items-center mx-auto" : "text-left items-start";
+  const Heading = as;
   return (
     <div className={`flex max-w-2xl flex-col gap-3 ${alignClass}`}>
       {eyebrow && (
@@ -15,7 +17,7 @@ export function SectionHeading({ eyebrow, title, subtitle, align = "left", light
           {eyebrow}
         </span>
       )}
-      <h2 className={`text-3xl font-semibold sm:text-4xl ${light ? "text-white" : "text-charcoal-900"}`}>{title}</h2>
+      <Heading className={`text-3xl font-semibold sm:text-4xl ${light ? "text-white" : "text-charcoal-900"}`}>{title}</Heading>
       {subtitle && (
         <p className={`text-base leading-relaxed ${light ? "text-steel-200" : "text-steel-600"}`}>{subtitle}</p>
       )}

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { SERVICE_ICON_NAMES, getServiceIcon } from "../../lib/serviceIcons";
+import { ensureUniqueServiceSlug, slugify } from "../../lib/slug";
 import { useServiceCategories } from "../../hooks/useServiceCategories";
 import { Button } from "../Button";
 import { ErrorNotice } from "../ErrorNotice";
@@ -9,7 +10,7 @@ import { ImageUploadField } from "./ImageUploadField";
 import type { Service } from "../../types";
 
 const inputClass =
-  "rounded-md border border-concrete-200 px-4 py-2.5 text-sm font-normal outline-none focus:border-safety-500";
+  "rounded-md border border-concrete-200 px-4 py-2.5 text-sm font-normal outline-none focus:border-safety-500 focus-visible:ring-2 focus-visible:ring-safety-500 focus-visible:ring-offset-2";
 
 export function ServiceEditor({
   service,
@@ -22,6 +23,8 @@ export function ServiceEditor({
 }) {
   const { categories } = useServiceCategories();
   const [title, setTitle] = useState(service?.title ?? "");
+  const [slug, setSlug] = useState(service?.slug ?? "");
+  const [slugTouched, setSlugTouched] = useState(Boolean(service));
   const [description, setDescription] = useState(service?.description ?? "");
   const [iconName, setIconName] = useState(service?.icon_name ?? SERVICE_ICON_NAMES[0]);
   const [imageUrl, setImageUrl] = useState<string | null>(service?.image_url ?? null);
@@ -38,8 +41,11 @@ export function ServiceEditor({
     setSaving(true);
     setError(null);
 
+    const uniqueSlug = await ensureUniqueServiceSlug(slugify(slug.trim() || title), service?.id);
+
     const payload = {
       title: title.trim(),
+      slug: uniqueSlug,
       description: description.trim(),
       icon_name: iconName,
       image_url: imageUrl,
@@ -77,6 +83,19 @@ export function ServiceEditor({
           <label className="flex flex-col gap-1.5 text-sm font-semibold text-charcoal-900">
             Title
             <input value={title} onChange={(e) => setTitle(e.target.value)} className={inputClass} placeholder="Service title" />
+          </label>
+
+          <label className="flex flex-col gap-1.5 text-sm font-semibold text-charcoal-900">
+            URL Slug
+            <input
+              value={slug}
+              onChange={(e) => {
+                setSlug(e.target.value);
+                setSlugTouched(true);
+              }}
+              placeholder={slugTouched ? "service-url-slug" : slugify(title) || "auto-generated-from-title"}
+              className={`${inputClass} font-mono text-xs`}
+            />
           </label>
 
           <label className="flex flex-col gap-1.5 text-sm font-semibold text-charcoal-900">

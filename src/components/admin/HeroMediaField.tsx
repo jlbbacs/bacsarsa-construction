@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { ImagePlus, Loader2, Video, X } from "lucide-react";
-import { deleteImage, uploadImage } from "../../lib/storage";
+import { compressImageToWebP, deleteImage, uploadImage } from "../../lib/storage";
 
 const MAX_VIDEO_MB = 50;
 
@@ -29,7 +29,8 @@ export function HeroMediaField({
     setUploading(true);
     setError(null);
     try {
-      const newUrl = await uploadImage(file, bucket);
+      const uploadFile = isVideo ? file : await compressImageToWebP(file);
+      const newUrl = await uploadImage(uploadFile, bucket);
       const previousImageUrl = imageUrl;
       const previousVideoUrl = videoUrl;
       onChange(isVideo ? { imageUrl: null, videoUrl: newUrl } : { imageUrl: newUrl, videoUrl: null });

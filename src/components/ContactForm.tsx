@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
 import { Send } from "lucide-react";
 import { Button } from "./Button";
+import { trackFormSubmit } from "../lib/analytics";
 
 type Status = "idle" | "sending" | "success" | "error" | "not-configured";
 
@@ -26,6 +27,7 @@ export function ContactForm() {
     setStatus("sending");
     try {
       await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current, PUBLIC_KEY);
+      trackFormSubmit("contact");
       setStatus("success");
       formRef.current.reset();
     } catch {

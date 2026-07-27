@@ -1,12 +1,16 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
+import { LazyMotion, domAnimation } from "framer-motion";
 import { SiteSettingsProvider } from "./context/SiteSettingsContext";
 import { ToastProvider } from "./context/ToastContext";
 import { ProfileProvider } from "./context/ProfileContext";
 import { NavBar } from "./components/NavBar";
 import { Footer } from "./components/Footer";
 import { PageLoader } from "./components/PageLoader";
+import { GlobalSchema } from "./components/GlobalSchema";
+import { Analytics } from "./components/Analytics";
+import { CookieConsent } from "./components/CookieConsent";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import Home from "./pages/Home";
 
@@ -31,43 +35,50 @@ function AppShell() {
   const isSystemPage = SYSTEM_PATHS.includes(location.pathname);
 
   return (
-    <div className="flex min-h-screen flex-col">
-      {!isSystemPage && <NavBar />}
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold"
-      >
-        Skip to content
-      </a>
-      <main id="main-content" className="flex-1">
-        <Suspense fallback={<PageLoader />}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/blog" element={<BlogList />} />
-            <Route path="/blog/:slug" element={<BlogPost />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/set-password" element={<SetPassword />} />
-            <Route path="/confirm-change" element={<ConfirmChange />} />
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
-      </main>
-      {!isSystemPage && <Footer />}
-    </div>
+    <LazyMotion features={domAnimation} strict>
+      <div className="flex min-h-screen flex-col">
+        <Analytics />
+        {!isSystemPage && <GlobalSchema />}
+        {!isSystemPage && <NavBar />}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold"
+        >
+          Skip to content
+        </a>
+        <main id="main-content" className="flex-1">
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/services" element={<Services />} />
+              <Route path="/services/:slug" element={<Services />} />
+              <Route path="/projects" element={<Projects />} />
+              <Route path="/projects/:slug" element={<Projects />} />
+              <Route path="/blog" element={<BlogList />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/set-password" element={<SetPassword />} />
+              <Route path="/confirm-change" element={<ConfirmChange />} />
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </main>
+        {!isSystemPage && <Footer />}
+        <CookieConsent />
+      </div>
+    </LazyMotion>
   );
 }
 

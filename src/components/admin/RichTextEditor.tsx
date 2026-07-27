@@ -43,7 +43,7 @@ import {
   CombineIcon,
   SplitSquareHorizontal,
 } from "lucide-react";
-import { uploadImage } from "../../lib/storage";
+import { compressImageToWebP, uploadImage } from "../../lib/storage";
 import { Callout, type CalloutType } from "./tiptap/CalloutExtension";
 
 const HEADING_OPTIONS = [
@@ -92,7 +92,8 @@ function Toolbar({ editor }: { editor: Editor }) {
 
   async function handleImageFile(file: File) {
     try {
-      const url = await uploadImage(file, "blog-images");
+      const compressed = await compressImageToWebP(file);
+      const url = await uploadImage(compressed, "blog-images");
       editor.chain().focus().setImage({ src: url }).run();
     } catch (err) {
       window.alert(err instanceof Error ? err.message : "Image upload failed.");
@@ -149,7 +150,7 @@ function Toolbar({ editor }: { editor: Editor }) {
             if (level === 0) editor.chain().focus().setParagraph().run();
             else editor.chain().focus().toggleHeading({ level: level as 1 | 2 | 3 | 4 }).run();
           }}
-          className="h-8 rounded-md border border-concrete-200 bg-white px-2 text-xs font-semibold text-charcoal-900 outline-none focus:border-safety-500"
+          className="h-8 rounded-md border border-concrete-200 bg-white px-2 text-xs font-semibold text-charcoal-900 outline-none focus:border-safety-500 focus-visible:ring-2 focus-visible:ring-safety-500 focus-visible:ring-offset-2"
         >
           {HEADING_OPTIONS.map((opt) => (
             <option key={opt.value} value={opt.value}>

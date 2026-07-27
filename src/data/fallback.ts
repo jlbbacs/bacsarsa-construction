@@ -17,6 +17,20 @@ export const FALLBACK_SITE_SETTINGS: SiteSettings = {
   phone: "(555) 010-2938",
   email: "info@meridianconstruction.example",
   address: "4820 Industrial Pkwy, Suite 200, Springfield, ST 00000",
+  address_street: "4820 Industrial Pkwy, Suite 200",
+  address_city: "Springfield",
+  address_state: "ST",
+  address_postal_code: "00000",
+  address_country: "US",
+  business_hours: {
+    monday: { open: "07:00", close: "17:00", closed: false },
+    tuesday: { open: "07:00", close: "17:00", closed: false },
+    wednesday: { open: "07:00", close: "17:00", closed: false },
+    thursday: { open: "07:00", close: "17:00", closed: false },
+    friday: { open: "07:00", close: "17:00", closed: false },
+    saturday: { open: "08:00", close: "12:00", closed: true },
+    sunday: { open: "08:00", close: "12:00", closed: true },
+  },
   facebook_url: null,
   instagram_url: null,
   linkedin_url: null,
@@ -76,6 +90,7 @@ export const FALLBACK_SERVICES: Service[] = [
   {
     id: "fallback-1",
     title: "Commercial Construction",
+    slug: "commercial-construction",
     description: "Ground-up builds and tenant improvements for retail, office, and hospitality spaces.",
     icon_name: "Building2",
     image_url: null,
@@ -86,6 +101,7 @@ export const FALLBACK_SERVICES: Service[] = [
   {
     id: "fallback-2",
     title: "Residential Building",
+    slug: "residential-building",
     description: "Custom homes, additions, and whole-house remodels built around how you actually live.",
     icon_name: "Home",
     image_url: null,
@@ -96,6 +112,7 @@ export const FALLBACK_SERVICES: Service[] = [
   {
     id: "fallback-3",
     title: "Industrial Projects",
+    slug: "industrial-projects",
     description: "Warehouses, distribution centers, and light-industrial facilities engineered for uptime.",
     icon_name: "Factory",
     image_url: null,
@@ -106,6 +123,7 @@ export const FALLBACK_SERVICES: Service[] = [
   {
     id: "fallback-4",
     title: "Renovation & Remodeling",
+    slug: "renovation-remodeling",
     description: "Structural, cosmetic, and code-driven renovations with minimal disruption to your operation.",
     icon_name: "Hammer",
     image_url: null,
@@ -116,6 +134,7 @@ export const FALLBACK_SERVICES: Service[] = [
   {
     id: "fallback-5",
     title: "Project Management",
+    slug: "project-management",
     description: "A single point of contact coordinating design, permitting, subcontractors, and inspections.",
     icon_name: "ClipboardCheck",
     image_url: null,
@@ -126,6 +145,7 @@ export const FALLBACK_SERVICES: Service[] = [
   {
     id: "fallback-6",
     title: "Site Development",
+    slug: "site-development",
     description: "Grading, utilities, and foundation work to get raw land ready to build on.",
     icon_name: "Truck",
     image_url: null,
@@ -139,6 +159,7 @@ export const FALLBACK_PROJECTS: Project[] = [
   {
     id: "fallback-1",
     title: "Riverside Office Park",
+    slug: "riverside-office-park",
     description: "A 3-building, 120,000 sq ft office campus delivered 6 weeks ahead of schedule.",
     category: "Commercial",
     location: "Springfield, ST",
@@ -152,6 +173,7 @@ export const FALLBACK_PROJECTS: Project[] = [
   {
     id: "fallback-2",
     title: "Oakmont Family Residence",
+    slug: "oakmont-family-residence",
     description: "A 4,200 sq ft custom home with a full basement build-out and detached workshop.",
     category: "Residential",
     location: "Oakmont, ST",
@@ -165,6 +187,7 @@ export const FALLBACK_PROJECTS: Project[] = [
   {
     id: "fallback-3",
     title: "Norwood Distribution Center",
+    slug: "norwood-distribution-center",
     description: "A 250,000 sq ft distribution facility with reinforced high-bay racking infrastructure.",
     category: "Industrial",
     location: "Norwood, ST",
@@ -178,6 +201,7 @@ export const FALLBACK_PROJECTS: Project[] = [
   {
     id: "fallback-4",
     title: "Main Street Retail Row",
+    slug: "main-street-retail-row",
     description: "Full tenant-improvement build-out for six storefronts along a historic downtown block.",
     category: "Commercial",
     location: "Downtown, ST",

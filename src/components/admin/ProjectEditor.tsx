@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { supabase } from "../../lib/supabase";
+import { ensureUniqueProjectSlug, slugify } from "../../lib/slug";
 import { Button } from "../Button";
 import { ErrorNotice } from "../ErrorNotice";
 import { ImageUploadField } from "./ImageUploadField";
 import type { Project, ProjectCategory } from "../../types";
 
 const inputClass =
-  "rounded-md border border-concrete-200 px-4 py-2.5 text-sm font-normal outline-none focus:border-safety-500";
+  "rounded-md border border-concrete-200 px-4 py-2.5 text-sm font-normal outline-none focus:border-safety-500 focus-visible:ring-2 focus-visible:ring-safety-500 focus-visible:ring-offset-2";
 
 const CATEGORY_OPTIONS: ProjectCategory[] = ["Commercial", "Residential", "Industrial"];
 
@@ -26,6 +27,8 @@ export function ProjectEditor({
   onCancel: () => void;
 }) {
   const [title, setTitle] = useState(project?.title ?? "");
+  const [slug, setSlug] = useState(project?.slug ?? "");
+  const [slugTouched, setSlugTouched] = useState(Boolean(project));
   const [description, setDescription] = useState(project?.description ?? "");
   const [category, setCategory] = useState<ProjectCategory>(project?.category ?? "Commercial");
   const [location, setLocation] = useState(project?.location ?? "");
@@ -45,8 +48,11 @@ export function ProjectEditor({
     setSaving(true);
     setError(null);
 
+    const uniqueSlug = await ensureUniqueProjectSlug(slugify(slug.trim() || title), project?.id);
+
     const payload = {
       title: title.trim(),
+      slug: uniqueSlug,
       description: description.trim(),
       category,
       location: location.trim() || null,
@@ -87,6 +93,19 @@ export function ProjectEditor({
           <label className="flex flex-col gap-1.5 text-sm font-semibold text-charcoal-900">
             Title
             <input value={title} onChange={(e) => setTitle(e.target.value)} className={inputClass} placeholder="Project title" />
+          </label>
+
+          <label className="flex flex-col gap-1.5 text-sm font-semibold text-charcoal-900">
+            URL Slug
+            <input
+              value={slug}
+              onChange={(e) => {
+                setSlug(e.target.value);
+                setSlugTouched(true);
+              }}
+              placeholder={slugTouched ? "project-url-slug" : slugify(title) || "auto-generated-from-title"}
+              className={`${inputClass} font-mono text-xs`}
+            />
           </label>
 
           <label className="flex flex-col gap-1.5 text-sm font-semibold text-charcoal-900">

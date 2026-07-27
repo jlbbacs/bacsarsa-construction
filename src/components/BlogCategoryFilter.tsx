@@ -15,7 +15,7 @@ export function BlogCategoryFilter({
         type="button"
         onClick={() => onChange(null)}
         className={`rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-wide transition-colors ${
-          activeId === null ? "bg-safety-500 text-white" : "bg-white text-charcoal-800 ring-1 ring-inset ring-concrete-200 hover:bg-concrete-50"
+          activeId === null ? "bg-safety-600 text-white" : "bg-white text-charcoal-800 ring-1 ring-inset ring-concrete-200 hover:bg-concrete-50"
         }`}
       >
         All
@@ -26,7 +26,7 @@ export function BlogCategoryFilter({
           type="button"
           onClick={() => onChange(cat.id)}
           className={`rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-wide transition-colors ${
-            activeId === cat.id ? "bg-safety-500 text-white" : "bg-white text-charcoal-800 ring-1 ring-inset ring-concrete-200 hover:bg-concrete-50"
+            activeId === cat.id ? "bg-safety-600 text-white" : "bg-white text-charcoal-800 ring-1 ring-inset ring-concrete-200 hover:bg-concrete-50"
           }`}
         >
           {cat.name}

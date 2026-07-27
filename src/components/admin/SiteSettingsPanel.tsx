@@ -5,10 +5,11 @@ import { Button } from "../Button";
 import { ErrorNotice } from "../ErrorNotice";
 import { PageLoader } from "../PageLoader";
 import { ImageUploadField } from "./ImageUploadField";
+import { BusinessHoursField } from "./BusinessHoursField";
 import type { SiteSettings } from "../../types";
 
 const inputClass =
-  "rounded-md border border-concrete-200 px-4 py-2.5 text-sm font-normal outline-none focus:border-safety-500";
+  "rounded-md border border-concrete-200 px-4 py-2.5 text-sm font-normal outline-none focus:border-safety-500 focus-visible:ring-2 focus-visible:ring-safety-500 focus-visible:ring-offset-2";
 
 export function SiteSettingsPanel() {
   const { settings, loading, refresh } = useSiteSettingsContext();
@@ -83,9 +84,48 @@ export function SiteSettingsPanel() {
           </div>
 
           <label className="flex flex-col gap-1.5 text-sm font-semibold text-charcoal-900">
-            Address
-            <input value={current.address} onChange={(e) => update("address", e.target.value)} className={inputClass} />
+            Street Address
+            <input
+              value={current.address_street}
+              onChange={(e) => update("address_street", e.target.value)}
+              className={inputClass}
+              placeholder="4820 Industrial Pkwy, Suite 200"
+            />
           </label>
+
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
+            <label className="flex flex-col gap-1.5 text-sm font-semibold text-charcoal-900">
+              City
+              <input value={current.address_city} onChange={(e) => update("address_city", e.target.value)} className={inputClass} />
+            </label>
+            <label className="flex flex-col gap-1.5 text-sm font-semibold text-charcoal-900">
+              State
+              <input value={current.address_state} onChange={(e) => update("address_state", e.target.value)} className={inputClass} />
+            </label>
+            <label className="flex flex-col gap-1.5 text-sm font-semibold text-charcoal-900">
+              Postal Code
+              <input
+                value={current.address_postal_code}
+                onChange={(e) => update("address_postal_code", e.target.value)}
+                className={inputClass}
+              />
+            </label>
+          </div>
+
+          <label className="flex flex-col gap-1.5 text-sm font-semibold text-charcoal-900">
+            Country Code
+            <input
+              value={current.address_country}
+              onChange={(e) => update("address_country", e.target.value)}
+              className={inputClass}
+              placeholder="US"
+            />
+          </label>
+
+          <span className="mt-2 border-t border-concrete-200 pt-5 text-sm font-bold uppercase tracking-wide text-charcoal-900">
+            Business Hours
+          </span>
+          <BusinessHoursField value={current.business_hours} onChange={(hours) => update("business_hours", hours)} />
 
           <span className="mt-2 border-t border-concrete-200 pt-5 text-sm font-bold uppercase tracking-wide text-charcoal-900">
             Social Links

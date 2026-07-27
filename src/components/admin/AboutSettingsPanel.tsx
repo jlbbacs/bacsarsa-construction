@@ -9,7 +9,7 @@ import { ImageUploadField } from "./ImageUploadField";
 import type { AboutConfig, AboutStat } from "../../types";
 
 const inputClass =
-  "rounded-md border border-concrete-200 px-4 py-2.5 text-sm font-normal outline-none focus:border-safety-500";
+  "rounded-md border border-concrete-200 px-4 py-2.5 text-sm font-normal outline-none focus:border-safety-500 focus-visible:ring-2 focus-visible:ring-safety-500 focus-visible:ring-offset-2";
 
 export function AboutSettingsPanel() {
   const [config, setConfig] = useState<AboutConfig>(FALLBACK_ABOUT_CONFIG);

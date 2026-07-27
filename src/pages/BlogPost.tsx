@@ -6,7 +6,11 @@ import { SEO } from "../components/SEO";
 import { Container } from "../components/Container";
 import { PageLoader } from "../components/PageLoader";
 import { ButtonLink } from "../components/Button";
+import { Breadcrumbs } from "../components/Breadcrumbs";
 import { useBlogPost } from "../hooks/useBlogPost";
+import { useSiteSettingsContext } from "../context/SiteSettingsContext";
+import { buildBlogPosting, buildWebPage } from "../lib/schema";
+import { sanitizeHtml } from "../lib/sanitize";
 import NotFound from "./NotFound";
 
 function formatDate(iso: string | null) {
@@ -17,24 +21,35 @@ function formatDate(iso: string | null) {
 export default function BlogPost() {
   const { slug } = useParams<{ slug: string }>();
   const { post, loading } = useBlogPost(slug);
+  const { settings } = useSiteSettingsContext();
 
   if (loading || post === undefined) return <PageLoader />;
   if (post === null) return <NotFound />;
+
+  const description = post.meta_description ?? post.excerpt ?? post.title;
 
   return (
     <>
       <SEO
         title={post.seo_title?.trim() || post.title}
-        description={post.meta_description ?? post.excerpt ?? post.title}
+        description={description}
         image={post.og_image_url ?? post.featured_image_url}
         path={`/blog/${post.slug}`}
         type="article"
         ogTitle={post.og_title}
         ogDescription={post.og_description}
+        publishedTime={post.published_at}
+        modifiedTime={post.updated_at}
+        jsonLd={[
+          buildWebPage({ name: post.title, description, path: `/blog/${post.slug}` }),
+          buildBlogPosting(post, settings),
+        ]}
       />
 
       <section className="bg-charcoal-900 py-16 sm:py-20">
         <Container className="flex max-w-3xl flex-col gap-4">
+          <Breadcrumbs items={[{ name: "Blog", path: "/blog" }, { name: post.title, path: `/blog/${post.slug}` }]} />
+
           <ButtonLink to="/blog" variant="ghost" className="w-fit !text-steel-200 hover:!text-white">
             <ArrowLeft className="h-4 w-4" />
             Back To Blog
@@ -61,6 +76,9 @@ export default function BlogPost() {
             src={post.featured_image_url}
             alt={post.title}
             className="aspect-video w-full rounded-md object-cover shadow-lg"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
           />
         </Container>
       )}
@@ -68,7 +86,7 @@ export default function BlogPost() {
       <section className={`bg-white pb-16 md:pb-24 ${post.featured_image_url ? "pt-0" : "pt-16 md:pt-24"}`}>
         <Container className="max-w-3xl">
           {post.content_html ? (
-            <div className="prose-post" dangerouslySetInnerHTML={{ __html: post.content_html }} />
+            <div className="prose-post" dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content_html) }} />
           ) : (
             <div className="prose-post">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content_markdown}</ReactMarkdown>

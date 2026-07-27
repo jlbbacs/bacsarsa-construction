@@ -7,7 +7,7 @@ import { useToast } from "../../context/ToastContext";
 import type { Profile } from "../../types";
 
 const inputClass =
-  "w-full rounded-md border border-concrete-200 px-4 py-2.5 text-sm font-normal outline-none focus:border-safety-500";
+  "w-full rounded-md border border-concrete-200 px-4 py-2.5 text-sm font-normal outline-none focus:border-safety-500 focus-visible:ring-2 focus-visible:ring-safety-500 focus-visible:ring-offset-2";
 
 // Editing a Super Admin's own name/phone happens through Account Settings,
 // not here. Username is deliberately not editable from this modal -- it

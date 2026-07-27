@@ -4,16 +4,19 @@ import { PageHeader } from "../components/PageHeader";
 import { ContactForm } from "../components/ContactForm";
 import { ContactInfoCard } from "../components/ContactInfoCard";
 import { useSiteSettingsContext } from "../context/SiteSettingsContext";
+import { buildContactPage } from "../lib/schema";
 
 export default function Contact() {
   const { settings } = useSiteSettingsContext();
+  const description = `Get a free quote from ${settings.brand_name}. Tell us about your commercial, residential, or industrial project.`;
 
   return (
     <>
       <SEO
         title="Contact"
-        description={`Get a free quote from ${settings.brand_name}. Tell us about your commercial, residential, or industrial project.`}
+        description={description}
         path="/contact"
+        jsonLd={buildContactPage({ name: `Contact | ${settings.brand_name}`, description, path: "/contact" })}
       />
 
       <PageHeader
@@ -21,6 +24,7 @@ export default function Contact() {
         title="Let's Talk About Your Project"
         subtitle="Fill out the form below or give us a call -- we typically respond within one business day."
         imageUrl={settings.contact_header_image_url}
+        breadcrumbs={[{ name: "Contact", path: "/contact" }]}
       />
 
       <section className="bg-white py-16 md:py-24">
