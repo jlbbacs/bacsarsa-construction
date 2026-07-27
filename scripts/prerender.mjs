@@ -89,35 +89,52 @@ async function main() {
 
   const pristineShell = await loadPristineShell();
   const server = await startStaticServer(pristineShell);
-  const browser = await chromium.launch();
-  const page = await browser.newPage();
 
-  // Captured in memory and only written to disk after every route has been
-  // crawled -- see loadPristineShell()'s comment for why writing mid-crawl
-  // would let one route's rendered HTML leak into another's starting shell.
-  const results = [];
-  for (const route of routes) {
-    try {
-      // "load" first (reliable even when a page has continuous network
-      // activity, e.g. an autoplaying hero video, which would keep
-      // "networkidle" from ever resolving). Then best-effort wait for
-      // networkidle with a short timeout to let one-shot Supabase data
-      // fetches settle -- falling back to a fixed grace period if that
-      // never quiets down, rather than failing the whole route.
-      await page.goto(`http://localhost:${PORT}${route}`, { waitUntil: "load", timeout: 20000 });
+  // Everything from here on (browser launch through the crawl) must never
+  // fail the build -- prerendering is a nice-to-have for AI crawlers/link
+  // unfurlers, not something the deploy should live or die on. A missing
+  // Chromium binary on the build host (e.g. if the platform's `npm install`
+  // doesn't run playwright's postinstall download) would otherwise throw
+  // uncaught here and fail the entire `npm run build` chain.
+  let results = [];
+  let browser;
+  try {
+    browser = await chromium.launch();
+    const page = await browser.newPage();
+
+    // Captured in memory and only written to disk after every route has
+    // been crawled -- see loadPristineShell()'s comment for why writing
+    // mid-crawl would let one route's rendered HTML leak into another's
+    // starting shell.
+    for (const route of routes) {
       try {
-        await page.waitForLoadState("networkidle", { timeout: 4000 });
-      } catch {
-        await page.waitForTimeout(1500);
+        // "load" first (reliable even when a page has continuous network
+        // activity, e.g. an autoplaying hero video, which would keep
+        // "networkidle" from ever resolving). Then best-effort wait for
+        // networkidle with a short timeout to let one-shot Supabase data
+        // fetches settle -- falling back to a fixed grace period if that
+        // never quiets down, rather than failing the whole route.
+        await page.goto(`http://localhost:${PORT}${route}`, { waitUntil: "load", timeout: 20000 });
+        try {
+          await page.waitForLoadState("networkidle", { timeout: 4000 });
+        } catch {
+          await page.waitForTimeout(1500);
+        }
+        results.push({ route, html: await page.content() });
+      } catch (err) {
+        console.warn(`[prerender] Failed to prerender ${route}:`, err instanceof Error ? err.message : err);
       }
-      results.push({ route, html: await page.content() });
-    } catch (err) {
-      console.warn(`[prerender] Failed to prerender ${route}:`, err instanceof Error ? err.message : err);
     }
+  } catch (err) {
+    console.warn(
+      "[prerender] Chromium unavailable or crawl failed -- shipping the build without prerendered HTML.",
+      err instanceof Error ? err.message : err
+    );
+    results = [];
+  } finally {
+    await browser?.close().catch(() => {});
+    server.close();
   }
-
-  await browser.close();
-  server.close();
 
   for (const { route, html } of results) {
     const outDir = route === "/" ? DIST_DIR : path.join(DIST_DIR, route);
