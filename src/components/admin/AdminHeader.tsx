@@ -94,7 +94,8 @@ export function AdminHeader({
         </div>
       </Container>
 
-      <Container className="overflow-x-auto">
+      {/* Desktop/tablet: horizontal tab row (fits without scrolling at sm+). */}
+      <Container className="hidden overflow-x-auto sm:block">
         <div className="flex w-max min-w-full gap-1">
           {visibleTabs.map((t) => (
             <button
@@ -109,6 +110,27 @@ export function AdminHeader({
             </button>
           ))}
         </div>
+      </Container>
+
+      {/* Mobile: a native select instead of a swipe-to-scroll tab row, so every
+          tab (including Settings/Users/Security/About/Account) is reachable
+          without a sideways gesture that's easy to mistake for page scroll. */}
+      <Container className="pb-3 sm:hidden">
+        <label className="sr-only" htmlFor="admin-tab-select">
+          Dashboard section
+        </label>
+        <select
+          id="admin-tab-select"
+          value={tab}
+          onChange={(e) => onTabChange(e.target.value as AdminTab)}
+          className="w-full rounded-md border border-charcoal-700 bg-charcoal-800 px-4 py-2.5 text-sm font-semibold text-white outline-none focus:border-safety-500 focus-visible:ring-2 focus-visible:ring-safety-500 focus-visible:ring-offset-2 focus-visible:ring-offset-charcoal-900"
+        >
+          {visibleTabs.map((t) => (
+            <option key={t} value={t}>
+              {TAB_LABELS[t]}
+            </option>
+          ))}
+        </select>
       </Container>
     </header>
   );
